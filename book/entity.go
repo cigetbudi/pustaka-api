@@ -10,5 +10,5 @@ type Book struct {
 	Rating      int
 	Discount    int
 	CreatedAt   time.Time
-	Updateat    time.Time
+	UpdateAt    time.Time
 }
