@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"pustaka-api/book"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -39,7 +40,33 @@ func (h *bookHandler) GetBooks(c *gin.Context) {
 		booksResponse = append(booksResponse, bookResponse)
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"error": booksResponse,
+		"data": booksResponse,
+	})
+}
+
+func (h *bookHandler) GetBook(c *gin.Context) {
+	idString := c.Param("id")
+	id, _ := strconv.Atoi(idString)
+
+	b, err := h.bookService.FindById(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+	}
+
+	bookResponse := book.BookResponse{
+		ID:          b.ID,
+		Title:       b.Title,
+		Price:       b.Price,
+		Decsription: b.Decsription,
+		Rating:      b.Rating,
+		Discount:    b.Discount,
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": bookResponse,
 	})
 }
 
