@@ -23,18 +23,48 @@ func main() {
 	db.AutoMigrate(&book.Book{})
 
 	//CRUD
-	book := book.Book{}
-	book.Title = "Mein Kampf"
-	book.Price = 120000
-	book.Discount = 5000
-	book.Rating = 4
-	book.Decsription = "Kisah Adolf Hitler semasa Hidup"
+	//https://gorm.io/docs/query.html
+	//CREATE
+	// book := book.Book{}
+	// book.Title = "Mein Kampf"
+	// book.Price = 120000
+	// book.Discount = 5000
+	// book.Rating = 4
+	// book.Decsription = "Kisah Adolf Hitler semasa Hidup"
 
-	err = db.Create(&book).Error
+	// err = db.Create(&book).Error
+	// if err != nil {
+	// 	fmt.Println("===============")
+	// 	fmt.Println("Error buat baru")
+	// 	fmt.Println("===============")
+	// }
+
+	//READ GET BY ID
+	// var book book.Book
+
+	// err = db.Debug().First(&book, 1).Error
+	// if err != nil {
+	// 	fmt.Println("===============")
+	// 	fmt.Println("Error baca")
+	// 	fmt.Println("===============")
+	// }
+
+	// fmt.Println("Title :", book.Title)
+	// fmt.Println("book object %v", book)
+
+	//READ GET ALL WHERE CONDITION
+	var books []book.Book
+
+	err = db.Debug().Where("rating = ?", 4).Find(&books).Error
 	if err != nil {
 		fmt.Println("===============")
-		fmt.Println("Error buat baru")
+		fmt.Println("Error baca")
 		fmt.Println("===============")
+	}
+
+	for _, b := range books {
+		fmt.Println("Title :", b.Title)
+		fmt.Println("book object %v", b)
 	}
 
 	router := gin.Default()
