@@ -17,30 +17,30 @@ func NewBookHandler(bookService book.Service) *bookHandler {
 	return &bookHandler{bookService}
 }
 
-func (h *bookHandler) RootHandler(c *gin.Context) {
+func (h *bookHandler) GetBooks(c *gin.Context) {
+	books, err := h.bookService.FindAll()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+	}
+
+	var booksResponse []book.BookResponse
+
+	for _, b := range books {
+		bookResponse := book.BookResponse{
+			ID:          b.ID,
+			Title:       b.Title,
+			Price:       b.Price,
+			Decsription: b.Decsription,
+			Rating:      b.Rating,
+			Discount:    b.Discount,
+		}
+		booksResponse = append(booksResponse, bookResponse)
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"name": "Sigit Budi",
-		"bio":  "miwon",
+		"error": booksResponse,
 	})
-}
-
-func (h *bookHandler) HelloHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"name":    "Sigit Budi",
-		"message": "HALO SEMUA",
-	})
-}
-
-func (h *bookHandler) BooksHandler(c *gin.Context) {
-	id := c.Param("id")
-	title := c.Param("title")
-	c.JSON(http.StatusOK, gin.H{"id": id, "title": title})
-}
-
-func (h *bookHandler) QueryHandler(c *gin.Context) {
-	title := c.Query("title")
-	price := c.Query("price")
-	c.JSON(http.StatusOK, gin.H{"title": title, "price": price})
 }
 
 func (h *bookHandler) PostBooksHandler(c *gin.Context) {
@@ -73,3 +73,30 @@ func (h *bookHandler) PostBooksHandler(c *gin.Context) {
 		"data": book,
 	})
 }
+
+//LATIHAN
+// func (h *bookHandler) RootHandler(c *gin.Context) {
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"name": "Sigit Budi",
+// 		"bio":  "miwon",
+// 	})
+// }
+
+// func (h *bookHandler) HelloHandler(c *gin.Context) {
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"name":    "Sigit Budi",
+// 		"message": "HALO SEMUA",
+// 	})
+// }
+
+// func (h *bookHandler) BooksHandler(c *gin.Context) {
+// 	id := c.Param("id")
+// 	title := c.Param("title")
+// 	c.JSON(http.StatusOK, gin.H{"id": id, "title": title})
+// }
+
+// func (h *bookHandler) QueryHandler(c *gin.Context) {
+// 	title := c.Query("title")
+// 	price := c.Query("price")
+// 	c.JSON(http.StatusOK, gin.H{"title": title, "price": price})
+// }
