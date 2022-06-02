@@ -19,9 +19,23 @@ func main() {
 		log.Fatal("Gagal koneksi database")
 	}
 	fmt.Println("Koneksi database berhasil")
-
 	//migrasi
 	db.AutoMigrate(&book.Book{})
+
+	//CRUD
+	book := book.Book{}
+	book.Title = "Mein Kampf"
+	book.Price = 120000
+	book.Discount = 5000
+	book.Rating = 4
+	book.Decsription = "Kisah Adolf Hitler semasa Hidup"
+
+	err = db.Create(&book).Error
+	if err != nil {
+		fmt.Println("===============")
+		fmt.Println("Error buat baru")
+		fmt.Println("===============")
+	}
 
 	router := gin.Default()
 
