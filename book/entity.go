@@ -8,6 +8,7 @@ type Book struct {
 	Decsription string
 	Price       int
 	Rating      int
+	Discount    int
 	CreatedAt   time.Time
 	Updateat    time.Time
 }
