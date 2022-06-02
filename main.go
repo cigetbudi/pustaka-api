@@ -70,8 +70,27 @@ func main() {
 	//UPDATE
 	//UPDATE BY ID
 
-	var book book.Book
+	// var book book.Book
 
+	// err = db.Debug().Where("id = ?", 1).Find(&book).Error
+	// if err != nil {
+	// 	fmt.Println("===============")
+	// 	fmt.Println("Error baca")
+	// 	fmt.Println("===============")
+	// }
+
+	// book.Title = "Tan Malaka (Updated)"
+	// err = db.Save(&book).Error
+	// if err != nil {
+	// 	fmt.Println("===============")
+	// 	fmt.Println("Gagal Update data")
+	// 	fmt.Println("===============")
+	// }
+
+	//DELETE
+	//DELETE BY ID
+
+	var book book.Book
 	err = db.Debug().Where("id = ?", 1).Find(&book).Error
 	if err != nil {
 		fmt.Println("===============")
@@ -79,11 +98,10 @@ func main() {
 		fmt.Println("===============")
 	}
 
-	book.Title = "Tan Malaka (Updated)"
-	err = db.Save(&book).Error
+	err = db.Delete(&book).Error
 	if err != nil {
 		fmt.Println("===============")
-		fmt.Println("Gagal Update data")
+		fmt.Println("Gagal menghapus data")
 		fmt.Println("===============")
 	}
 
