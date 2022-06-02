@@ -22,88 +22,30 @@ func main() {
 	//migrasi
 	db.AutoMigrate(&book.Book{})
 
-	//CRUD
-	//https://gorm.io/docs/query.html
-	//CREATE
-	// book := book.Book{}
-	// book.Title = "Mein Kampf"
-	// book.Price = 120000
-	// book.Discount = 5000
-	// book.Rating = 4
-	// book.Decsription = "Kisah Adolf Hitler semasa Hidup"
+	bookRepository := book.NewRepository(db)
 
-	// err = db.Create(&book).Error
-	// if err != nil {
-	// 	fmt.Println("===============")
-	// 	fmt.Println("Error buat baru")
-	// 	fmt.Println("===============")
+	// //FINDALL
+	// books, err := bookRepository.FindAll()
+
+	// for _, book := range books {
+	// 	fmt.Println("Title :", book.Title)
 	// }
 
-	//READ GET BY ID
-	// var book book.Book
-
-	// err = db.Debug().First(&book, 1).Error
-	// if err != nil {
-	// 	fmt.Println("===============")
-	// 	fmt.Println("Error baca")
-	// 	fmt.Println("===============")
-	// }
-
+	// //GETBYID
+	// book, err := bookRepository.FindById(2)
 	// fmt.Println("Title :", book.Title)
-	// fmt.Println("book object %v", book)
 
-	//READ GET ALL WHERE CONDITION
-	// var books []book.Book
+	//CREATE
 
-	// err = db.Debug().Where("rating = ?", 4).Find(&books).Error
-	// if err != nil {
-	// 	fmt.Println("===============")
-	// 	fmt.Println("Error baca")
-	// 	fmt.Println("===============")
-	// }
-
-	// for _, b := range books {
-	// 	fmt.Println("Title :", b.Title)
-	// 	fmt.Println("book object %v", b)
-	// }
-
-	//UPDATE
-	//UPDATE BY ID
-
-	// var book book.Book
-
-	// err = db.Debug().Where("id = ?", 1).Find(&book).Error
-	// if err != nil {
-	// 	fmt.Println("===============")
-	// 	fmt.Println("Error baca")
-	// 	fmt.Println("===============")
-	// }
-
-	// book.Title = "Tan Malaka (Updated)"
-	// err = db.Save(&book).Error
-	// if err != nil {
-	// 	fmt.Println("===============")
-	// 	fmt.Println("Gagal Update data")
-	// 	fmt.Println("===============")
-	// }
-
-	//DELETE
-	//DELETE BY ID
-
-	var book book.Book
-	err = db.Debug().Where("id = ?", 1).Find(&book).Error
-	if err != nil {
-		fmt.Println("===============")
-		fmt.Println("Error baca")
-		fmt.Println("===============")
+	book := book.Book{
+		Title:       "Jayalah Indonesia",
+		Decsription: "Gaada",
+		Price:       90000,
+		Rating:      5,
+		Discount:    0,
 	}
 
-	err = db.Delete(&book).Error
-	if err != nil {
-		fmt.Println("===============")
-		fmt.Println("Gagal menghapus data")
-		fmt.Println("===============")
-	}
+	bookRepository.CreateBook(book)
 
 	router := gin.Default()
 
