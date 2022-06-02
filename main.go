@@ -53,18 +53,38 @@ func main() {
 	// fmt.Println("book object %v", book)
 
 	//READ GET ALL WHERE CONDITION
-	var books []book.Book
+	// var books []book.Book
 
-	err = db.Debug().Where("rating = ?", 4).Find(&books).Error
+	// err = db.Debug().Where("rating = ?", 4).Find(&books).Error
+	// if err != nil {
+	// 	fmt.Println("===============")
+	// 	fmt.Println("Error baca")
+	// 	fmt.Println("===============")
+	// }
+
+	// for _, b := range books {
+	// 	fmt.Println("Title :", b.Title)
+	// 	fmt.Println("book object %v", b)
+	// }
+
+	//UPDATE
+	//UPDATE BY ID
+
+	var book book.Book
+
+	err = db.Debug().Where("id = ?", 1).Find(&book).Error
 	if err != nil {
 		fmt.Println("===============")
 		fmt.Println("Error baca")
 		fmt.Println("===============")
 	}
 
-	for _, b := range books {
-		fmt.Println("Title :", b.Title)
-		fmt.Println("book object %v", b)
+	book.Title = "Tan Malaka (Updated)"
+	err = db.Save(&book).Error
+	if err != nil {
+		fmt.Println("===============")
+		fmt.Println("Gagal Update data")
+		fmt.Println("===============")
 	}
 
 	router := gin.Default()
