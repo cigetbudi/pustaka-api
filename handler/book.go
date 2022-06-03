@@ -56,7 +56,7 @@ func (h *bookHandler) GetBook(c *gin.Context) {
 	})
 }
 
-func (h *bookHandler) PostBooksHandler(c *gin.Context) {
+func (h *bookHandler) CreateBook(c *gin.Context) {
 	//title,price
 	var bookRequest book.BookRequest
 	err := c.ShouldBindJSON(&bookRequest)
@@ -83,7 +83,39 @@ func (h *bookHandler) PostBooksHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": book,
+		"data": convertToBookResponse(book),
+	})
+}
+
+func (h *bookHandler) UpdateBook(c *gin.Context) {
+	//title,price
+	var bookRequest book.BookRequest
+	err := c.ShouldBindJSON(&bookRequest)
+
+	if err != nil {
+
+		errorMessages := []string{}
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("Error di kolom %s, condition: %s", e.Field(), e.ActualTag())
+			errorMessages = append(errorMessages, errorMessage)
+		}
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": errorMessages,
+		})
+		return
+
+	}
+	idString := c.Param("id")
+	id, _ := strconv.Atoi(idString)
+	book, err := h.bookService.Update(id, bookRequest)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": convertToBookResponse(book),
 	})
 }
 
